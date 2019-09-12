@@ -28,3 +28,19 @@ auth:
     url: http://www.oauth2-client.com:8089/granttoken
   resource:
     url: http://www.oauth2-resourceserver.com:8098
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+server:
+  servlet:
+    session:
+      timeout: 180s
+  port: 8089
+logging:
+  level:
+    root: info
+    org.springframework.web: info
+    org.springframework.security: info
