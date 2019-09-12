@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: spring-oauth2-client
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    timeout: 5000
+  sesion:
+    store-type: REDIS
+    redis:
+      flush-mode: IMMEDIATE
+      namespace: oauth2:client:session
+  security:
+    filter:
+      order: 3
+auth:
+  client:
+    id: blogClientId
+    secret: secret
+  server:
+    url: http://www.oauth2-server.com
+  redirect:
+    url: http://www.oauth2-client.com:8089/granttoken
+  resource:
+    url: http://www.oauth2-resourceserver.com:8098
