@@ -1,7 +1,9 @@
-package com.adley.oauth.client.web;
+package com.adley.oauth.server.web;
 
 @Controller
 public class MainController {
+    @Resource(name="tokenStore")
+    private TokenStore tokenStore;
 
     @RequestMapping("/")
     public String root() {return "redirect:/index";}
@@ -12,8 +14,8 @@ public class MainController {
     @RequestMapping("/user/index")
     public String userIndex() {return "user/index";}
 
-    @RequestMapping("/toauth/authpwd")
-    public String passwordToken() {return "oauth/authpwd";}
+    @RequestMapping("/toauth/clients")
+    public ModelAndView clients(ModelAndView modelAndView) {return "oauth/authpwd";}
 
     @RequestMapping("/toauth/codeauth")
     public String codeToken() {return "oauth/codeauth";}
