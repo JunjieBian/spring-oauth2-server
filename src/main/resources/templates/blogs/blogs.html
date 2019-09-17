@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>Blog</title>
+        <script th:replace="@{/header.html}"></script>
+    </head>
+    <body>
+        <p><a th:href="@{/index}">Back to home page</a></p>
+        <ul th:each="blog: ${blogList}">
+            <li><span th:onclick="|readBlog('${blog.id}')|" style="text-decoration: underline; cursor: pointer;" th:text="${blog.title}"></span></li>
+        </ul>
+        <div id="blogContent" style="height: auto; width: auto;"></div>
+        <script th:inline="javascript">
+            function readBlog(id) {
+                $.ajax({
+                    data: {"blogId": id},
+                    type: "GET",
+                    url: "/blogs/content",
+                    timeout: 2000,
+                    contentType: "application/x-www-form-urlencoded;charset=urf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        $("#blogContent").html(data.content);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
