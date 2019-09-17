@@ -1,4 +1,4 @@
-package com.adley.oauth.client.config;
+package com.adley.oauth.server.config;
 
 @Configuration
 @EnableWebMvc
