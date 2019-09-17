@@ -1,4 +1,4 @@
-package com.adley.oauth.client.service;
+package com.adley.oauth.server.service;
 
 @Slf4j
 public class AuthService implements UserDetailsService {
