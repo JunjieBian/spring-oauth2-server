@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>Login page</title>
+        <script th:replace="@{/header.html}"></script>
+    </head>
+    <body>
+        <p th:if="@{loginError}" class="error" th:text="${errorMessage}">[...]</p>
+        <form th:action="@{/login}" method="post" th:object="${session.CSRF_TOKEN}">
+            <label for="username">Username</label>:
+            <input type="text" id="username" name="username" autofocus="autofocus"/><br/>
+            <label for="password">Password</label>:
+            <input type="text" id="password" name="password" autofocus="autofocus"/><br/>
+            <input type="submit" value="Log in"/>
+        </form>
+    </body>
+</html>
