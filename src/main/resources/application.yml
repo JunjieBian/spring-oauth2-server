@@ -1,12 +1,22 @@
 spring:
   application:
-    name: spring-oauth2-client
+    name: spring-oauth2-server
   profiles:
     active: dev
   thymeleaf:
     cache: false
+  datasource:
+    url: jdbc:h2:mem:oauth2
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
   redis:
-    database: 0
+    database: 1
     host: localhost
     port: 6379
     timeout: 5000
@@ -14,20 +24,10 @@ spring:
     store-type: REDIS
     redis:
       flush-mode: IMMEDIATE
-      namespace: oauth2:client:session
+      namespace: oauth2:server:session
   security:
     filter:
       order: 3
-auth:
-  client:
-    id: blogClientId
-    secret: secret
-  server:
-    url: http://www.oauth2-server.com
-  redirect:
-    url: http://www.oauth2-client.com:8089/granttoken
-  resource:
-    url: http://www.oauth2-resourceserver.com:8098
 management:
   endpoints:
     enabled-by-default: true
@@ -38,7 +38,7 @@ server:
   servlet:
     session:
       timeout: 180s
-  port: 8089
+  port: 8099
 logging:
   level:
     root: info
