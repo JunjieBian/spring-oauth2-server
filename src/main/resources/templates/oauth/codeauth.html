@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>authpwd</title>
+        <script th:replace="@{/header.html}"></script>
+    </head>
+    <body>
+        <h1>grant type: password</h1>
+        <p th:if="@{loginError}" class="error" th:text="${errorMessage}">[...]</p>
+        <form action="http://www.oauth2-server.com:8099/oauth/authorize" method="post" th:object="${session.CSRF_TOKEN}">
+            <input type="text" name="response_type" value="code"/>
+            <input type="text" name="client_id" value="blogClientId"/>
+            <input type="text" name="redirect_uri" value="http://www.oauth-client.com:8089/granttoken"/>
+            <input type="text" name="scope" value="read"/>
+            <input type="button" onclick="goAuth()" value="login"/>
+        </form>
+        <p><a th:href="@{/user/index}">Back to home page</a></p>
+        <script th:inline="javascript">
+            function goAuth() {
+                var data = $("form").serialize();
+                data += "&state="+Base64.encode(UUID.generate());
+                var mv = window.open('');
+                mv.location = $("form").prop("action")+"?"+data;
+            }
+        </script>
+    </body>
+</html>
