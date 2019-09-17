@@ -1,4 +1,4 @@
-package com.adley.oauth.client.modal;
+package com.adley.oauth.server.modal;
 
 public class SpsUserDetails implements UserDetails {
     private String userName;
