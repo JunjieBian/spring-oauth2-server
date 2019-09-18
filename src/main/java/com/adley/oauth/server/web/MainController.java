@@ -4,6 +4,8 @@ package com.adley.oauth.server.web;
 public class MainController {
     @Resource(name="tokenStore")
     private TokenStore tokenStore;
+    @Autowired
+    private ClientDetailsMapper clientDetailsMapper;
 
     @RequestMapping("/")
     public String root() {return "redirect:/index";}
@@ -15,10 +17,31 @@ public class MainController {
     public String userIndex() {return "user/index";}
 
     @RequestMapping("/toauth/clients")
-    public ModelAndView clients(ModelAndView modelAndView) {return "oauth/authpwd";}
+    public ModelAndView clients(ModelAndView modelAndView) {
+        modelAndView.setViewName("oauth/client_list");
+        modelAndView.addObject("clientIds",clientDetailsMapper.findAllIds());
+        return modelAndView;
+    }
 
-    @RequestMapping("/toauth/codeauth")
-    public String codeToken() {return "oauth/codeauth";}
+    @GetMapping("/toauth/tokens", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody ResponseEntity<List<String>> tokens(String clientId) {
+        return new ResponseEntity(tokenStore.findTokensByClientId(clientId).steram().map(Oauth2AccessToken::getValue).collect(Collectors.toList()),HttpStatus.OK);
+    }
+    
+    @PutMapping("/toauth/revoketoken", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody ResponseEntity<String> revoketoken(@RequestParam String clientId, @RequestParam String tokenId) {
+        Collection<Oauth2AccessToken> tokens = tokenStore.findTokensByClientId(clientId);
+        if (CollectionUtils.isEmpty(tokens) {
+            return new ResponseEntity<>("token不存在",HttpStatus.OK);
+        }
+        Optional<OAuth2AccessToken> token = tokens.stream().filter(o->o.getValue().equalsIgnoreCase(tokenId)).findFirst();
+        if (token.isPresent()) {
+            token.removeAccessToken(token.get());
+            return new ResponseEntity<>("token回收成功",HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("token不存在",HttpStatus.OK);
+        }
+    }
 
     @RequestMapping("/login")
     public String login() {return "login";}
