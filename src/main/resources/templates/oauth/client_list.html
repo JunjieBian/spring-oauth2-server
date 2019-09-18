@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>Token List</title>
+        <script th:replace="@{/header.html}"></script>
+    </head>
+    <body>
+        <p><a th:href="@{/user/index}">Back to home page</a></p>
+        <ul th:each="id: ${clientIds}">
+            <li style="text-decoration: underline; cursor: pointer;" th:data-client-id="${id}" th:onclick="|getAccessToken(this)|">查看客户端 <span th:text="${id}">id</span> token</li>
+        </ul>
+        <div id="tokenList" style="height: auto; width: auto;"></div>
+        <input id="curId" type="hidden"/>
+        <button onclick="revokeToken()">回收当前token</button>
+        <script th:inline="javascript">
+            function getAccessToken(li) {
+                $("#curId").val($(li).data("client-id"));
+                $.ajax({
+                    data: {"clientId": $(li).data("client-id")},
+                    type: "GET",
+                    url: "token",
+                    ContentType: "application/x-www-form-urlencoded;charset=urf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        $("#tokenList").html(data.join("<bt/>"))
+                    }
+                });
+            }
+            
+            function revokeToken() {
+                layer.prompt({title: "回收token",formType:0},function(v,i,e){
+                    $.ajax({
+                    type: "PUT",
+                    url: "revoketoken?clientId="+$("#curId").val()+"&tokenId="+v,
+                    ContentType: "application/x-www-form-urlencoded;charset=urf-8",
+                    dataType: "json"
+                    }).done(function(data){
+                        layer.close(i)
+                        layer.msg(data,{time:2000})
+                    }).fail(function(data){
+                        layer.close(i)
+                        layer.msg(data,{time:2000})
+                    });
+                });
+            }
+        </script>
+    </body>
+</html>
