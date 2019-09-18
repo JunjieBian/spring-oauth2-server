@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
     <head>
-        <title>User Index</title>
+        <title>Index</title>
         <script th:replace="@{/header.html}"></script>
     </head>
     <body>
         <div th:substituteby="index::logout"></div>
         <p><a th:href="@{/index}">Back to home page</a></p>
         <ul>
-            <li><span th:onclick="readBlogs()" style="text-decoration: underline; cursor: pointer;">查看我的微博</span></li>
+            <li>Go to the <a th:href="@{/toauth/clients}">client list</a></li>
         </ul>
-        <script th:inline="javascript">
-            function readBlog() {
-                $.get('/weibo/auth',function(data){window.open(data)});
-            }
-        </script>
     </body>
 </html>
